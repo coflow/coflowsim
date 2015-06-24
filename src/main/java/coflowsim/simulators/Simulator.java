@@ -156,6 +156,7 @@ public abstract class Simulator {
    * <li>If any job/coflow has completed, update relavant data structures using
    * {@link #afterJobDeparture(long)}.
    * <li>Repeat.
+   * </ul>
    * 
    * @param EPOCH_IN_MILLIS
    *          simulator epoch length in milliseconds

@@ -27,6 +27,7 @@ import coflowsim.utils.Utils;
  * <li>Assuming all reducers to arrive together arrive at time zero. This should be replaced by an
  * appropriate arrival function like Poisson arrival.
  * <li>All times are in milliseconds.
+ * </ul>
  */
 public class CustomTraceProducer extends TraceProducer {
 
