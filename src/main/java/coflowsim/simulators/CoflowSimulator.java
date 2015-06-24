@@ -17,7 +17,7 @@ import coflowsim.utils.Utils;
 
 /**
  * Implements {@link coflowsim.simulators.Simulator} for coflow-level scheduling policies (FIFO,
- * SCF, NCF, LCF, and GAMMA).
+ * SCF, NCF, LCF, and SEBF).
  */
 public class CoflowSimulator extends Simulator {
 
@@ -38,7 +38,7 @@ public class CoflowSimulator extends Simulator {
 
     super(sharingAlgo, traceProducer, offline, considerDeadline, deadlineMultRandomFactor);
     assert (sharingAlgo == SHARING_ALGO.FIFO || sharingAlgo == SHARING_ALGO.SCF
-        || sharingAlgo == SHARING_ALGO.NCF || sharingAlgo == SHARING_ALGO.LCF || sharingAlgo == SHARING_ALGO.GAMMA);
+        || sharingAlgo == SHARING_ALGO.NCF || sharingAlgo == SHARING_ALGO.LCF || sharingAlgo == SHARING_ALGO.SEBF);
   }
 
   /** {@inheritDoc} */
@@ -321,7 +321,7 @@ public class CoflowSimulator extends Simulator {
           break;
         } else if (sharingAlgo == SHARING_ALGO.LCF && LCFComparator.compare(j, sj) < 0) {
           break;
-        } else if (sharingAlgo == SHARING_ALGO.GAMMA && GAMMAComparator.compare(j, sj) < 0) {
+        } else if (sharingAlgo == SHARING_ALGO.SEBF && SEBFComparator.compare(j, sj) < 0) {
           break;
         }
         index++;
@@ -440,7 +440,7 @@ public class CoflowSimulator extends Simulator {
    * Comparator used by {@link CoflowSimulator#addToSortedJobs(Job)} to add new job in list sorted
    * by static coflow skew.
    */
-  private static Comparator<Job> GAMMAComparator = new Comparator<Job>() {
+  private static Comparator<Job> SEBFComparator = new Comparator<Job>() {
     public int compare(Job o1, Job o2) {
       if (o1.alpha == o2.alpha) return 0;
       return o1.alpha < o2.alpha ? -1 : 1;

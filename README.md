@@ -26,7 +26,7 @@ It has multiple heuristics and algorithms implemented already. For coflow-based 
 2. **SCF**: Shortest-Coflow-First
 3. **NCF**: Narrowest-Coflow First
 4. **LCF**: Lightest-Coflow-First 
-5. **GAMMA**: Smallest-Skew-First
+5. **SEBF**: Smallest-Effective-Bottleneck-First / Smallest-Skew-First
 
 For per-flow scheduling, **CoflowSim** supports:
 

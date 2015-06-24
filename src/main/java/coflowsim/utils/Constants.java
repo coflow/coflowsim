@@ -38,7 +38,7 @@ public class Constants {
     /**
      * Order coflows by skew.
      */
-    GAMMA,
+    SEBF,
   }
 
   /**

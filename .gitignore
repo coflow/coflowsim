@@ -6,3 +6,5 @@ release.properties
 .project
 .classpath
 .settings/
+.DS_Store
+.metadata/

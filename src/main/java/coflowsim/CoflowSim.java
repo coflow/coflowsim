@@ -30,8 +30,8 @@ public class CoflowSim {
         sharingAlgo = SHARING_ALGO.NCF;
       } else if (UPPER_ARG.contains("LCF") || UPPER_ARG.contains("LJF")) {
         sharingAlgo = SHARING_ALGO.LCF;
-      } else if (UPPER_ARG.contains("GAMMA")) {
-        sharingAlgo = SHARING_ALGO.GAMMA;
+      } else if (UPPER_ARG.contains("SEBF")) {
+        sharingAlgo = SHARING_ALGO.SEBF;
       } else {
         System.err.println("Unsupported or Wrong Sharing Algorithm");
         System.exit(1);
