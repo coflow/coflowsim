@@ -32,24 +32,6 @@ public class FlowSimulator extends Simulator {
     assert (sharingAlgo == SHARING_ALGO.FAIR || sharingAlgo == SHARING_ALGO.PDQ);
   }
 
-  private void addAscending(Vector<ReduceTask> coll, ReduceTask rt, long curTime) {
-    int index = 0;
-    for (; index < coll.size(); index++) {
-      if (considerDeadline) {
-        double thatTimeLeft = coll.elementAt(index).parentJob.timeTillDeadline(curTime);
-        double thisTimeLeft = rt.parentJob.timeTillDeadline(curTime);
-        if (thatTimeLeft > thisTimeLeft) {
-          break;
-        }
-      } else {
-        if (coll.elementAt(index).shuffleBytesLeft > rt.shuffleBytesLeft) {
-          break;
-        }
-      }
-    }
-    coll.add(index, rt);
-  }
-
   private void addAscending(Vector<Flow> coll, Vector<Flow> flows) {
     for (Flow f : flows) {
       addAscending(coll, f);
@@ -81,15 +63,8 @@ public class FlowSimulator extends Simulator {
         if (!activeJobs.containsKey(rt.parentJob.jobName)) {
           activeJobs.put(rt.parentJob.jobName, rt.parentJob);
         }
-
-        int toRack = rt.taskID;
-        // Add task to respective elements.
-        // Shortest-first for pdq and arrival order for others.
-        if (sharingAlgo == SHARING_ALGO.PDQ) {
-          addAscending(reducersInRacks[toRack], rt, CURRENT_TIME);
-        } else {
-          reducersInRacks[toRack].add(rt);
-        }
+        
+        incNumActiveTasks();
       }
     }
 
@@ -194,7 +169,7 @@ public class FlowSimulator extends Simulator {
           if (!rt.parentJob.jobActive) {
             removeDeadJob(rt.parentJob);
           }
-          reducersInRacks[i].remove(rt);
+          decNumActiveTasks();
         }
       }
       flowsInRacks[i].removeAll(flowsToRemove);
@@ -244,7 +219,7 @@ public class FlowSimulator extends Simulator {
             if (!rt.parentJob.jobActive) {
               removeDeadJob(rt.parentJob);
             }
-            reducersInRacks[i].remove(rt);
+            decNumActiveTasks();
           }
 
           break;

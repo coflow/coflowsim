@@ -72,16 +72,6 @@ public class CoflowSimulator extends Simulator {
     return true;
   }
 
-  private void addAscending(Vector<ReduceTask> coll, ReduceTask rt) {
-    int index = 0;
-    for (; index < coll.size(); index++) {
-      if (coll.elementAt(index).shuffleBytesLeft > rt.shuffleBytesLeft) {
-        break;
-      }
-    }
-    coll.add(index, rt);
-  }
-
   /** {@inheritDoc} */
   @Override
   protected void uponJobAdmission(Job j) {
@@ -97,9 +87,7 @@ public class CoflowSimulator extends Simulator {
           activeJobs.put(rt.parentJob.jobName, rt.parentJob);
           addToSortedJobs(j);
         }
-
-        int toRack = rt.taskID;
-        addAscending(reducersInRacks[toRack], rt);
+        incNumActiveTasks();
       }
     }
   }
@@ -372,14 +360,14 @@ public class CoflowSimulator extends Simulator {
           if (!rt.parentJob.jobActive) {
             removeDeadJob(rt.parentJob);
           }
-          reducersInRacks[i].remove(rt);
+          decNumActiveTasks();
         }
       }
       flowsInRacks[i].removeAll(flowsToRemove);
     }
   }
 
-  private void layoutFlowsInJobOrder() {
+  protected void layoutFlowsInJobOrder() {
     for (int i = 0; i < NUM_RACKS; i++) {
       flowsInRacks[i].clear();
     }

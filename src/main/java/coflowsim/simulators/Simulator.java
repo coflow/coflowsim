@@ -7,7 +7,6 @@ import java.util.Vector;
 import coflowsim.datastructures.Flow;
 import coflowsim.datastructures.Job;
 import coflowsim.datastructures.JobCollection;
-import coflowsim.datastructures.ReduceTask;
 import coflowsim.traceproducers.TraceProducer;
 import coflowsim.utils.Constants;
 import coflowsim.utils.Constants.SHARING_ALGO;
@@ -25,7 +24,6 @@ public abstract class Simulator {
   protected JobCollection jobs;
 
   protected Vector<Flow>[] flowsInRacks;
-  protected Vector<ReduceTask>[] reducersInRacks;
   protected HashMap<String, Job> activeJobs;
 
   protected SHARING_ALGO sharingAlgo;
@@ -36,6 +34,8 @@ public abstract class Simulator {
   double deadlineMultRandomFactor;
 
   protected long CURRENT_TIME = 0;
+  
+  private int numActiveTasks = 0;
 
   /**
    * Constructor for Simulator.
@@ -84,11 +84,6 @@ public abstract class Simulator {
     this.flowsInRacks = (Vector<Flow>[]) new Vector[NUM_RACKS];
     for (int i = 0; i < NUM_RACKS; i++) {
       flowsInRacks[i] = new Vector<Flow>();
-    }
-
-    this.reducersInRacks = (Vector<ReduceTask>[]) new Vector[NUM_RACKS];
-    for (int i = 0; i < NUM_RACKS; i++) {
-      reducersInRacks[i] = new Vector<ReduceTask>();
     }
 
     this.activeJobs = new HashMap<String, Job>();
@@ -166,7 +161,7 @@ public abstract class Simulator {
     int TOTAL_JOBS = jobs.size();
 
     for (CURRENT_TIME = 0; CURRENT_TIME < Constants.SIMULATION_ENDTIME_MILLIS
-        && (curJob < TOTAL_JOBS || numActiveTasks() > 0); CURRENT_TIME += EPOCH_IN_MILLIS) {
+        && (curJob < TOTAL_JOBS || numActiveTasks > 0); CURRENT_TIME += EPOCH_IN_MILLIS) {
 
       int jobsAdded = 0;
 
@@ -302,12 +297,12 @@ public abstract class Simulator {
     return sumDur;
   }
 
-  private int numActiveTasks() {
-    int sum = 0;
-    for (int i = 0; i < NUM_RACKS; i++) {
-      sum += reducersInRacks[i].size();
-    }
-    return sum;
+  public void incNumActiveTasks() {
+    numActiveTasks++;
+  }
+
+  public void decNumActiveTasks() {
+    numActiveTasks--;
   }
 
   /**
