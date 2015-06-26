@@ -106,6 +106,17 @@ public abstract class Task implements Comparable<Task> {
 
   /**
    * <p>
+   * hasStarted
+   * </p>
+   * 
+   * @return a boolean
+   */
+  public boolean hasStarted() {
+    return simulatedStartTime != -1;
+  }
+
+  /**
+   * <p>
    * isCompleted.
    * </p>
    * 

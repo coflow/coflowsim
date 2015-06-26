@@ -1,6 +1,7 @@
 package coflowsim;
 
 import coflowsim.simulators.CoflowSimulator;
+import coflowsim.simulators.CoflowSimulatorDark;
 import coflowsim.simulators.FlowSimulator;
 import coflowsim.simulators.Simulator;
 import coflowsim.traceproducers.CustomTraceProducer;
@@ -32,6 +33,8 @@ public class CoflowSim {
         sharingAlgo = SHARING_ALGO.LCF;
       } else if (UPPER_ARG.contains("SEBF")) {
         sharingAlgo = SHARING_ALGO.SEBF;
+      } else if (UPPER_ARG.contains("DARK")) {
+        sharingAlgo = SHARING_ALGO.DARK;
       } else {
         System.err.println("Unsupported or Wrong Sharing Algorithm");
         System.exit(1);
@@ -105,7 +108,10 @@ public class CoflowSim {
     if (sharingAlgo == SHARING_ALGO.FAIR || sharingAlgo == SHARING_ALGO.PDQ) {
       nlpl = new FlowSimulator(sharingAlgo, traceProducer, isOffline, considerDeadline,
           deadlineMultRandomFactor);
-    } else {
+    } else if (sharingAlgo == SHARING_ALGO.DARK) {
+      nlpl = new CoflowSimulatorDark(sharingAlgo, traceProducer, isOffline);
+    }
+    else {
       nlpl = new CoflowSimulator(sharingAlgo, traceProducer, isOffline, considerDeadline,
           deadlineMultRandomFactor);
     }

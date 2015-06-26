@@ -53,7 +53,7 @@ public class CoflowSimulator extends Simulator {
     this.sortedJobs = new Vector<Job>();
   }
 
-  private void resetSendRecvBpsFree() {
+  protected void resetSendRecvBpsFree() {
     Arrays.fill(this.sendBpsFree, Constants.RACK_BITS_PER_SEC);
     Arrays.fill(this.recvBpsFree, Constants.RACK_BITS_PER_SEC);
   }
@@ -292,7 +292,7 @@ public class CoflowSimulator extends Simulator {
     return jobAlloc;
   }
 
-  private void addToSortedJobs(Job j) {
+  protected void addToSortedJobs(Job j) {
     if (considerDeadline) {
       sortedJobs.add(j);
       return;
@@ -353,6 +353,7 @@ public class CoflowSimulator extends Simulator {
         totalBytesMoved += bytesPerTask;
         rt.shuffleBytesLeft -= bytesPerTask;
         rt.parentJob.decreaseShuffleBytesPerRack(rt.taskID, bytesPerTask);
+        rt.parentJob.shuffleBytesCompleted += bytesPerTask;
 
         // If no bytes remaining, mark end and mark for removal
         if ((rt.shuffleBytesLeft <= Constants.ZERO || rt.flows.size() == 0) && !rt.isCompleted()) {

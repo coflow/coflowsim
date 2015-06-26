@@ -28,8 +28,11 @@ public class Job implements Comparable<Job> {
 
   public Vector<ReduceTask>[] tasksInRacks;
   public double[] shuffleBytesPerRack;
+  public double shuffleBytesCompleted;
 
   int[] numMappersInRacks;
+  
+  public int currentJobQueue;
 
   // Number of mappers and reducers in the original job
   public int actualNumMappers;
@@ -402,7 +405,10 @@ public class Job implements Comparable<Job> {
 
     tasksInRacks = null;
     shuffleBytesPerRack = null;
+    shuffleBytesCompleted = 0;
 
+    currentJobQueue = 0;
+    
     alpha = Constants.VALUE_UNKNOWN;
     deadlineDuration = Constants.VALUE_UNKNOWN;
     wasAdmitted = false;
@@ -416,7 +422,8 @@ public class Job implements Comparable<Job> {
   /** {@inheritDoc} */
   @Override
   public String toString() {
-    return jobName + "(" + numMappers + "/" + numReducers + ")";
+    return jobName + "(" + numMappers + "/" + numReducers + " | " + shuffleBytesCompleted + "/"
+        + totalShuffleBytes + ")";
   }
 
   /**
