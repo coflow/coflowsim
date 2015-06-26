@@ -2,7 +2,7 @@
 
 **CoflowSim** is a flow-level simulator to compare various coflow scheduling heurisitcs against traditional per-flow scheduling techniques. 
 
-The entire project (**CoflowSim** and the actual implementation **Varys**) is still in closed beta stage. The master branch is in version 0.0.1-SNAPSHOT.
+The entire project (**CoflowSim** and the actual implementation **Varys**) is still in closed beta stage. The master branch is in version 0.2.0-SNAPSHOT.
 
 ##How to Compile
 **CoflowSim** does not have any dependency on external library.

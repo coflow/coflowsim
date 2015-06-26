@@ -54,6 +54,7 @@ public class CoflowSimulatorDark extends CoflowSimulator {
    * </p>
    * 
    * @param curTime
+   *          current time
    */
   protected void updateRates(long curTime) {
     // Reset sendBpsFree and recvBpsFree
