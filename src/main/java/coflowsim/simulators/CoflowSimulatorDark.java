@@ -26,9 +26,9 @@ public class CoflowSimulatorDark extends CoflowSimulator {
   /**
    * {@inheritDoc}
    */
-  public CoflowSimulatorDark(SHARING_ALGO sharingAlgo, TraceProducer traceProducer, boolean offline) {
+  public CoflowSimulatorDark(SHARING_ALGO sharingAlgo, TraceProducer traceProducer) {
 
-    super(sharingAlgo, traceProducer, offline, false, 0.0);
+    super(sharingAlgo, traceProducer, false, false, 0.0);
 
     initialize(traceProducer);
 

@@ -109,7 +109,7 @@ public class CoflowSim {
       nlpl = new FlowSimulator(sharingAlgo, traceProducer, isOffline, considerDeadline,
           deadlineMultRandomFactor);
     } else if (sharingAlgo == SHARING_ALGO.DARK) {
-      nlpl = new CoflowSimulatorDark(sharingAlgo, traceProducer, isOffline);
+      nlpl = new CoflowSimulatorDark(sharingAlgo, traceProducer);
     }
     else {
       nlpl = new CoflowSimulator(sharingAlgo, traceProducer, isOffline, considerDeadline,
