@@ -49,14 +49,13 @@ public class CoflowSimulatorDark extends CoflowSimulator {
 
   /**
    * <p>
-   * FIFO within each queue
-   * Strict priority across queues
+   * FIFO within each queue Strict priority across queues
    * </p>
    * 
    * @param curTime
    *          current time
    */
-  protected void updateRates(long curTime) {
+  private void updateRates(long curTime) {
     // Reset sendBpsFree and recvBpsFree
     resetSendRecvBpsFree();
 
@@ -128,6 +127,7 @@ public class CoflowSimulatorDark extends CoflowSimulator {
   /** {@inheritDoc} */
   @Override
   protected void afterJobAdmission(long curTime) {
+    updateJobOrder();
     layoutFlowsInJobOrder();
     updateRates(curTime);
   }
@@ -135,6 +135,8 @@ public class CoflowSimulatorDark extends CoflowSimulator {
   /** {@inheritDoc} */
   @Override
   protected void afterJobDeparture(long curTime) {
+    updateJobOrder();
+    layoutFlowsInJobOrder();
     updateRates(curTime);
   }
 
@@ -154,7 +156,7 @@ public class CoflowSimulatorDark extends CoflowSimulator {
    * Update job order by FIFO in each queue and move jobs between queues based on total current size
    * </p>
    */
-  protected void updateJobOrder() {
+  private void updateJobOrder() {
     for (int i = 0; i < NUM_JOB_QUEUES; i++) {
       Vector<Job> jobsToMove = new Vector<Job>();
       for (Job j : sortedJobs[i]) {
