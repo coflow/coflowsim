@@ -63,7 +63,7 @@ public class FlowSimulator extends Simulator {
         if (!activeJobs.containsKey(rt.parentJob.jobName)) {
           activeJobs.put(rt.parentJob.jobName, rt.parentJob);
         }
-        
+
         incNumActiveTasks();
       }
     }

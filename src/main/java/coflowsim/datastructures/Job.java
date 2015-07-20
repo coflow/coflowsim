@@ -16,6 +16,8 @@ public class Job implements Comparable<Job> {
   public final int jobID;
 
   public double actualStartTime;
+
+  // TODO: All three below are unused; should be removed.
   public double actualFinishTime;
   public double actualShuffleStartTime;
   public double actualShuffleFinishTime;
@@ -31,7 +33,7 @@ public class Job implements Comparable<Job> {
   public double shuffleBytesCompleted;
 
   int[] numMappersInRacks;
-  
+
   public int currentJobQueue;
 
   // Number of mappers and reducers in the original job
@@ -408,7 +410,7 @@ public class Job implements Comparable<Job> {
     shuffleBytesCompleted = 0;
 
     currentJobQueue = 0;
-    
+
     alpha = Constants.VALUE_UNKNOWN;
     deadlineDuration = Constants.VALUE_UNKNOWN;
     wasAdmitted = false;

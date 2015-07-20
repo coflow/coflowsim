@@ -34,7 +34,7 @@ public abstract class Simulator {
   double deadlineMultRandomFactor;
 
   protected long CURRENT_TIME = 0;
-  
+
   private int numActiveTasks = 0;
 
   /**
@@ -196,6 +196,11 @@ public abstract class Simulator {
         int numActiveJobs = activeJobs.size();
         if (numActiveJobs == 0) {
           break;
+        }
+
+        // Print progress
+        if (i % 1024 == 0) {
+          System.err.println("Running: " + numActiveJobs + " Started: " + curJob);
         }
 
         long curTime = CURRENT_TIME + i;

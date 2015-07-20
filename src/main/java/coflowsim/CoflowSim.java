@@ -4,6 +4,7 @@ import coflowsim.simulators.CoflowSimulator;
 import coflowsim.simulators.CoflowSimulatorDark;
 import coflowsim.simulators.FlowSimulator;
 import coflowsim.simulators.Simulator;
+import coflowsim.traceproducers.CoflowBenchmarkTraceProducer;
 import coflowsim.traceproducers.CustomTraceProducer;
 import coflowsim.traceproducers.JobClassDescription;
 import coflowsim.traceproducers.TraceProducer;
@@ -100,6 +101,9 @@ public class CoflowSim {
 
         traceProducer = new CustomTraceProducer(numRacks, numJobs, jobClassDescs, fracsOfClasses,
             randomSeed);
+      } else if (UPPER_ARG.equals("COFLOW-BENCHMARK")) {
+        String pathToCoflowBenchmarkTraceFile = args[curArg++];
+        traceProducer = new CoflowBenchmarkTraceProducer(pathToCoflowBenchmarkTraceFile);
       }
     }
     traceProducer.prepareTrace();
@@ -110,8 +114,7 @@ public class CoflowSim {
           deadlineMultRandomFactor);
     } else if (sharingAlgo == SHARING_ALGO.DARK) {
       nlpl = new CoflowSimulatorDark(sharingAlgo, traceProducer);
-    }
-    else {
+    } else {
       nlpl = new CoflowSimulator(sharingAlgo, traceProducer, isOffline, considerDeadline,
           deadlineMultRandomFactor);
     }

@@ -38,10 +38,10 @@ public class Constants {
     /**
      * Order coflows by skew.
      */
-    SEBF, 
+    SEBF,
     /**
      * Use the non-clairvoyant scheduler.
-     */    
+     */
     DARK,
   }
 
