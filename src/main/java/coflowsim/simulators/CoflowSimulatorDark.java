@@ -29,9 +29,6 @@ public class CoflowSimulatorDark extends CoflowSimulator {
   public CoflowSimulatorDark(SHARING_ALGO sharingAlgo, TraceProducer traceProducer) {
 
     super(sharingAlgo, traceProducer, false, false, 0.0);
-
-    initialize(traceProducer);
-
     assert (sharingAlgo == SHARING_ALGO.DARK);
   }
 
