@@ -18,7 +18,7 @@ public class Constants {
     /**
      * Per-flow SRTF priority and EDF for deadline-sensitive flows.
      */
-    PDQ,
+    PFP,
     /**
      * First-In-First-Out at the coflow level.
      */

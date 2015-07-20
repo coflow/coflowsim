@@ -14,7 +14,7 @@ import coflowsim.utils.Constants.SHARING_ALGO;
 
 /**
  * Implements {@link coflowsim.simulators.Simulator} for flow-level scheduling policies (FAIR and
- * PDQ).
+ * PFP).
  */
 public class FlowSimulator extends Simulator {
 
@@ -29,7 +29,7 @@ public class FlowSimulator extends Simulator {
       double deadlineMultRandomFactor) {
 
     super(sharingAlgo, traceProducer, offline, considerDeadline, deadlineMultRandomFactor);
-    assert (sharingAlgo == SHARING_ALGO.FAIR || sharingAlgo == SHARING_ALGO.PDQ);
+    assert (sharingAlgo == SHARING_ALGO.FAIR || sharingAlgo == SHARING_ALGO.PFP);
   }
 
   private void addAscending(Vector<Flow> coll, Vector<Flow> flows) {
@@ -178,7 +178,7 @@ public class FlowSimulator extends Simulator {
   }
 
   /**
-   * Proceed flows in each rack in the already-determined order; e.g., shortest-first of PDQ or
+   * Proceed flows in each rack in the already-determined order; e.g., shortest-first of PFP or
    * earliest-deadline-first in the deadline-sensitive scenario.
    * 
    * @param curTime

@@ -22,8 +22,8 @@ public class CoflowSim {
 
       if (UPPER_ARG.contains("FAIR")) {
         sharingAlgo = SHARING_ALGO.FAIR;
-      } else if (UPPER_ARG.contains("PDQ")) {
-        sharingAlgo = SHARING_ALGO.PDQ;
+      } else if (UPPER_ARG.contains("PFP")) {
+        sharingAlgo = SHARING_ALGO.PFP;
       } else if (UPPER_ARG.contains("FIFO")) {
         sharingAlgo = SHARING_ALGO.FIFO;
       } else if (UPPER_ARG.contains("SCF") || UPPER_ARG.contains("SJF")) {
@@ -109,7 +109,7 @@ public class CoflowSim {
     traceProducer.prepareTrace();
 
     Simulator nlpl = null;
-    if (sharingAlgo == SHARING_ALGO.FAIR || sharingAlgo == SHARING_ALGO.PDQ) {
+    if (sharingAlgo == SHARING_ALGO.FAIR || sharingAlgo == SHARING_ALGO.PFP) {
       nlpl = new FlowSimulator(sharingAlgo, traceProducer, isOffline, considerDeadline,
           deadlineMultRandomFactor);
     } else if (sharingAlgo == SHARING_ALGO.DARK) {

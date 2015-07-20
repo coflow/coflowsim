@@ -36,4 +36,4 @@ For clairvoyant coflow-based scheduling **CoflowSim** supports the following heu
 For per-flow scheduling, **CoflowSim** supports:
 
 1. **FAIR**: Per-flow fair sharing
-2. **PDQ**: Per-flow prioritization, i.e., SRTF for minimizing time and EDF for meeting deadlines.
+2. **PFP**: Per-flow prioritization, i.e., SRTF for minimizing time and EDF for meeting deadlines. Examples include PDQ and pFabric.
