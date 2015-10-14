@@ -272,7 +272,7 @@ public class CoflowSimulator extends Simulator {
         sPortUsed[src] = true;
         rPortUsed[dst] = true;
 
-        double curBps = f.getFlowSize() * 8 / currentAlpha;
+        double curBps = f.bytesRemaining * 8 / currentAlpha;
         if (curBps > sendBpsFree[src] || curBps > recvBpsFree[dst]) {
           curBps = Math.min(sendBpsFree[src], recvBpsFree[dst]);
         }
