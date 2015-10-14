@@ -198,13 +198,14 @@ public abstract class Simulator {
           break;
         }
 
-        // Print progress
-        if (i % 1024 == 0) {
-          System.err.println("Running: " + numActiveJobs + " Started: " + curJob);
-        }
-
         long curTime = CURRENT_TIME + i;
         onSchedule(curTime);
+
+        // Print progress
+        if (curTime % Constants.SIMULATION_SECOND_MILLIS == 0) {
+          System.err.printf("Timestep %6d: Running: %3d Started: %5d\n",
+              (curTime / Constants.SIMULATION_SECOND_MILLIS), numActiveJobs, curJob);
+        }
 
         // Stuff after job departures
         if (numActiveJobs > activeJobs.size()) {
