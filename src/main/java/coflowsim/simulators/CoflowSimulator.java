@@ -141,7 +141,8 @@ public class CoflowSimulator extends Simulator {
 
     // Scale by available capacity
     for (int i = 0; i < NUM_RACKS; i++) {
-      if (sFree[i] <= Constants.ZERO || rFree[i] <= Constants.ZERO) {
+      if ((sendBytes[i] > 0 && sFree[i] <= Constants.ZERO)
+          || (recvBytes[i] > 0 && rFree[i] <= Constants.ZERO)) {
         return Constants.VALUE_UNKNOWN;
       }
 
