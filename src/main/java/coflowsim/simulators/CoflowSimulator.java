@@ -166,15 +166,31 @@ public class CoflowSimulator extends Simulator {
     // Reset sendBpsFree and recvBpsFree
     resetSendRecvBpsFree();
 
+    // For keeping track of jobs with invalid currentAlpha
+    Vector<Job> skippedJobs = new Vector<Job>();
+
     // Recalculate rates
     for (Job sj : sortedJobs) {
+      // Reset ALL rates first
+      for (Task t : sj.tasks) {
+        if (t.taskType == TaskType.REDUCER) {
+          ReduceTask rt = (ReduceTask) t;
+          for (Flow f : rt.flows) {
+            f.currentBps = 0;
+          }
+        }
+      }
+
       double[] sendUsed = new double[NUM_RACKS];
       double[] recvUsed = new double[NUM_RACKS];
       Arrays.fill(sendUsed, 0.0);
       Arrays.fill(recvUsed, 0.0);
 
       double currentAlpha = calcAlphaOnline(sj, sendBpsFree, recvBpsFree);
-      if (currentAlpha == Constants.VALUE_UNKNOWN) continue;
+      if (currentAlpha == Constants.VALUE_UNKNOWN) {
+        skippedJobs.add(sj);
+        continue;
+      }
       // Use deadline instead of alpha when considering deadlines
       if (considerDeadline) {
         currentAlpha = sj.deadlineDuration / 1000;
@@ -191,6 +207,20 @@ public class CoflowSimulator extends Simulator {
 
     // Work conservation
     if (!trialRun) {
+      // First, consider all skipped ones and divide remaining bandwidth between their flows
+      double[] sendUsed = new double[NUM_RACKS];
+      double[] recvUsed = new double[NUM_RACKS];
+      Arrays.fill(sendUsed, 0.0);
+      Arrays.fill(recvUsed, 0.0);
+
+      updateRatesFairShare(skippedJobs, sendUsed, recvUsed);
+
+      // Remove capacity from ALL sources and destination for the entire job
+      for (int i = 0; i < NUM_RACKS; i++) {
+        sendBpsFree[i] -= sendUsed[i];
+        recvBpsFree[i] -= recvUsed[i];
+      }
+
       // Heuristic: Sort coflows by EDF and then refill
       // If there is no deadline, this simply sorts them by arrival time
       Vector<Job> sortedByEDF = new Vector<Job>(sortedJobs);
@@ -204,11 +234,15 @@ public class CoflowSimulator extends Simulator {
 
       for (Job sj : sortedByEDF) {
         for (Task t : sj.tasks) {
-          if (t.taskType != TaskType.REDUCER) continue;
+          if (t.taskType != TaskType.REDUCER) {
+            continue;
+          }
 
           ReduceTask rt = (ReduceTask) t;
           int dst = rt.taskID;
-          if (recvBpsFree[dst] <= Constants.ZERO) continue;
+          if (recvBpsFree[dst] <= Constants.ZERO) {
+            continue;
+          }
 
           for (Flow f : rt.flows) {
             int src = f.mapper.taskID;
@@ -223,6 +257,94 @@ public class CoflowSimulator extends Simulator {
         }
       }
     }
+  }
+
+  /**
+   * Update rates of individual flows from a collection of coflows while considering them as a
+   * single coflow.
+   * 
+   * Modifies sendBpsFree and recvBpsFree
+   * 
+   * @param jobsToConsider
+   *          Collection of {@link coflowsim.datastructures.Job} under consideration.
+   * @param sendUsed
+   *          initialized to zeros.
+   * @param recvUsed
+   *          initialized to zeros.
+   * @return
+   */
+  private double updateRatesFairShare(
+      Vector<Job> jobsToConsider,
+      double[] sendUsed,
+      double[] recvUsed) {
+    double totalAlloc = 0.0;
+
+    // Calculate the number of mappers and reducers in each port
+    int[] numMapSideFlows = new int[NUM_RACKS];
+    Arrays.fill(numMapSideFlows, 0);
+    int[] numReduceSideFlows = new int[NUM_RACKS];
+    Arrays.fill(numReduceSideFlows, 0);
+
+    for (Job sj : jobsToConsider) {
+      for (Task t : sj.tasks) {
+        if (t.taskType != TaskType.REDUCER) {
+          continue;
+        }
+
+        ReduceTask rt = (ReduceTask) t;
+        int dst = rt.taskID;
+        if (recvBpsFree[dst] <= Constants.ZERO) {
+          continue;
+        }
+
+        for (Flow f : rt.flows) {
+          int src = f.mapper.taskID;
+          if (sendBpsFree[src] <= Constants.ZERO) {
+            continue;
+          }
+
+          numMapSideFlows[src]++;
+          numReduceSideFlows[dst]++;
+        }
+      }
+    }
+
+    for (Job sj : jobsToConsider) {
+      for (Task t : sj.tasks) {
+        if (t.taskType != TaskType.REDUCER) {
+          continue;
+        }
+
+        ReduceTask rt = (ReduceTask) t;
+        int dst = rt.taskID;
+        if (recvBpsFree[dst] <= Constants.ZERO || numReduceSideFlows[dst] == 0) {
+          continue;
+        }
+
+        for (Flow f : rt.flows) {
+          int src = f.mapper.taskID;
+          if (sendBpsFree[src] <= Constants.ZERO || numMapSideFlows[src] == 0) {
+            continue;
+          }
+
+          // Determine rate based only on this job and available bandwidth
+          double minFree = Math.min(sendBpsFree[src] / numMapSideFlows[src], recvBpsFree[dst]
+              / numReduceSideFlows[dst]);
+          if (minFree <= Constants.ZERO) {
+            minFree = 0.0;
+          }
+
+          f.currentBps = minFree;
+
+          // Remember how much capacity was allocated
+          sendUsed[src] += f.currentBps;
+          recvUsed[dst] += f.currentBps;
+          totalAlloc += f.currentBps;
+        }
+      }
+    }
+
+    return totalAlloc;
   }
 
   /**
@@ -250,11 +372,15 @@ public class CoflowSimulator extends Simulator {
     double jobAlloc = 0.0;
 
     for (Task t : sj.tasks) {
-      if (t.taskType != TaskType.REDUCER) continue;
+      if (t.taskType != TaskType.REDUCER) {
+        continue;
+      }
 
       ReduceTask rt = (ReduceTask) t;
       int dst = rt.taskID;
-      if (recvBpsFree[dst] <= Constants.ZERO) continue;
+      if (recvBpsFree[dst] <= Constants.ZERO) {
+        continue;
+      }
 
       for (Flow f : rt.flows) {
         int src = f.mapper.taskID;
