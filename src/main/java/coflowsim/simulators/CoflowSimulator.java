@@ -247,16 +247,6 @@ public class CoflowSimulator extends Simulator {
       double[] recvUsed,
       boolean trialRun) {
 
-    boolean[] sPortUsed = new boolean[NUM_RACKS];
-    boolean[] rPortUsed = new boolean[NUM_RACKS];
-    Arrays.fill(sPortUsed, false);
-    Arrays.fill(rPortUsed, false);
-
-    double[] sendUsed_temp = new double[NUM_RACKS];
-    double[] recvUsed_temp = new double[NUM_RACKS];
-    Arrays.fill(sendUsed_temp, 0.0);
-    Arrays.fill(recvUsed_temp, 0.0);
-
     double jobAlloc = 0.0;
 
     for (Task t : sj.tasks) {
@@ -268,10 +258,6 @@ public class CoflowSimulator extends Simulator {
 
       for (Flow f : rt.flows) {
         int src = f.mapper.taskID;
-
-        // Remember ports being used. Used later to update VOC reservation.
-        sPortUsed[src] = true;
-        rPortUsed[dst] = true;
 
         double curBps = f.bytesRemaining * 8 / currentAlpha;
         if (curBps > sendBpsFree[src] || curBps > recvBpsFree[dst]) {
