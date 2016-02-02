@@ -22,7 +22,7 @@ mvn exec:java -Dexec.mainClass="coflowsim.CoflowSim" -Dexec.args="<arguments>"
 From the command-line (assuming the jar to be in the `target` directory):
 
 ```
-java -cp target/coflowsim-*.jar <arguments>
+java -cp target/coflowsim-*.jar coflowsim.CoflowSim <arguments>
 ```
 
 ##Supported Modes and Scheduling Algorithms
