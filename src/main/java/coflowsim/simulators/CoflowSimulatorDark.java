@@ -70,11 +70,22 @@ public class CoflowSimulatorDark extends CoflowSimulator {
 
           ReduceTask rt = (ReduceTask) t;
           int dst = rt.taskID;
-          if (recvBpsFree[dst] <= Constants.ZERO) continue;
+          if (recvBpsFree[dst] <= Constants.ZERO) 
+          {/*Skipping this task means no rates to be assigned to its flows. So set them to 0 explicitly else it may send at the rate it was assigned last*/
+            for (Flow f : rt.flows) 
+            {
+              f.currentBps = 0;
+            }
+            continue;
+          }
 
           for (Flow f : rt.flows) {
             int src = f.mapper.taskID;
-            if (sendBpsFree[src] <= Constants.ZERO) continue;
+            if (sendBpsFree[src] <= Constants.ZERO)
+            {/*Skipping this task means no rates to be assigned to its flows. So set them to 0 explicitly else it may send at the rate it was assigned last*/
+              f.currentBps = 0;
+              continue;
+            }
 
             numMapSideFlows[src]++;
             numReduceSideFlows[dst]++;
