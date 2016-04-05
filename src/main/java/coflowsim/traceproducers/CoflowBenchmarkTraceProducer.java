@@ -127,9 +127,8 @@ public class CoflowBenchmarkTraceProducer extends TraceProducer {
           double shuffleBytes = Double.parseDouble(rack_MB.split(":")[1]) * 1048576.0;
 
           // Create reduce task
-          Task task = new ReduceTask(taskName, taskID, job, jobArrivalTime,
-              Constants.VALUE_IGNORED, new Machine(rackIndex), shuffleBytes,
-              Constants.VALUE_IGNORED);
+          Task task = new ReduceTask(taskName, taskID, job, jobArrivalTime, Constants.VALUE_IGNORED,
+              new Machine(rackIndex), shuffleBytes, Constants.VALUE_IGNORED);
 
           // Add task to corresponding job
           job.addTask(task);

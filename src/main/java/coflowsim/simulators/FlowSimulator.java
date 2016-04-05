@@ -139,8 +139,9 @@ public class FlowSimulator extends Simulator {
 
         ReduceTask rt = f.reducer;
 
-        double bytesPerTask = Math.min(Constants.RACK_BYTES_PER_SEC
-            * (1.0 * quantaSize / Constants.SIMULATION_SECOND_MILLIS) / numFlows,
+        double bytesPerTask = Math.min(
+            Constants.RACK_BYTES_PER_SEC * (1.0 * quantaSize / Constants.SIMULATION_SECOND_MILLIS)
+                / numFlows,
             Constants.RACK_BYTES_PER_SEC * (1.0 * quantaSize / Constants.SIMULATION_SECOND_MILLIS)
                 / numMapSideFlows[f.mapper.taskID]);
 
@@ -213,7 +214,8 @@ public class FlowSimulator extends Simulator {
           rt.parentJob.decreaseShuffleBytesPerRack(rt.taskID, bytesPerTask);
 
           // If no bytes remaining, mark end and mark for removal
-          if ((rt.shuffleBytesLeft <= Constants.ZERO || rt.flows.size() == 0) && !rt.isCompleted()) {
+          if ((rt.shuffleBytesLeft <= Constants.ZERO || rt.flows.size() == 0)
+              && !rt.isCompleted()) {
 
             rt.cleanupTask(curTime + quantaSize);
             if (!rt.parentJob.jobActive) {

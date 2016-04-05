@@ -70,10 +70,9 @@ public class CoflowSimulatorDark extends CoflowSimulator {
 
           ReduceTask rt = (ReduceTask) t;
           int dst = rt.taskID;
-          if (recvBpsFree[dst] <= Constants.ZERO) 
-          {/*Skipping this task means no rates to be assigned to its flows. So set them to 0 explicitly else it may send at the rate it was assigned last*/
-            for (Flow f : rt.flows) 
-            {
+          if (recvBpsFree[dst] <= Constants.ZERO) {
+            // Set rates to 0 explicitly else it may send at the rate it was assigned last
+            for (Flow f : rt.flows) {
               f.currentBps = 0;
             }
             continue;
@@ -81,8 +80,8 @@ public class CoflowSimulatorDark extends CoflowSimulator {
 
           for (Flow f : rt.flows) {
             int src = f.mapper.taskID;
-            if (sendBpsFree[src] <= Constants.ZERO)
-            {/*Skipping this task means no rates to be assigned to its flows. So set them to 0 explicitly else it may send at the rate it was assigned last*/
+            if (sendBpsFree[src] <= Constants.ZERO) {
+              // Set rates to 0 explicitly else it may send at the rate it was assigned last
               f.currentBps = 0;
               continue;
             }
@@ -109,8 +108,8 @@ public class CoflowSimulatorDark extends CoflowSimulator {
             if (sendBpsFree[src] <= Constants.ZERO || numMapSideFlows[src] == 0) continue;
 
             // Determine rate based only on this job and available bandwidth
-            double minFree = Math.min(sendBpsFree[src] / numMapSideFlows[src], recvBpsFree[dst]
-                / numReduceSideFlows[dst]);
+            double minFree = Math.min(sendBpsFree[src] / numMapSideFlows[src],
+                recvBpsFree[dst] / numReduceSideFlows[dst]);
             if (minFree <= Constants.ZERO) {
               minFree = 0.0;
             }

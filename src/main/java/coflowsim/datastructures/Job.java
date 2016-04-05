@@ -299,9 +299,8 @@ public class Job implements Comparable<Job> {
       if (tasksInRacks[i] != null && tasksInRacks[i].size() > 0) {
         numReducers++;
 
-        ReduceTask iThRt = new ReduceTask("JOB-" + jobID + "-REDUCE-" + i, i, this,
-            actualStartTime, Constants.VALUE_UNKNOWN, new Machine(i + 1), 0,
-            Constants.VALUE_UNKNOWN);
+        ReduceTask iThRt = new ReduceTask("JOB-" + jobID + "-REDUCE-" + i, i, this, actualStartTime,
+            Constants.VALUE_UNKNOWN, new Machine(i + 1), 0, Constants.VALUE_UNKNOWN);
 
         // Update shuffle counters in task
         for (ReduceTask rt : tasksInRacks[i]) {

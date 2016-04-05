@@ -38,7 +38,8 @@ public class CoflowSimulator extends Simulator {
 
     super(sharingAlgo, traceProducer, offline, considerDeadline, deadlineMultRandomFactor);
     assert (sharingAlgo == SHARING_ALGO.FIFO || sharingAlgo == SHARING_ALGO.SCF
-        || sharingAlgo == SHARING_ALGO.NCF || sharingAlgo == SHARING_ALGO.LCF || sharingAlgo == SHARING_ALGO.SEBF);
+        || sharingAlgo == SHARING_ALGO.NCF || sharingAlgo == SHARING_ALGO.LCF
+        || sharingAlgo == SHARING_ALGO.SEBF);
   }
 
   /** {@inheritDoc} */
@@ -328,8 +329,8 @@ public class CoflowSimulator extends Simulator {
           }
 
           // Determine rate based only on this job and available bandwidth
-          double minFree = Math.min(sendBpsFree[src] / numMapSideFlows[src], recvBpsFree[dst]
-              / numReduceSideFlows[dst]);
+          double minFree = Math.min(sendBpsFree[src] / numMapSideFlows[src],
+              recvBpsFree[dst] / numReduceSideFlows[dst]);
           if (minFree <= Constants.ZERO) {
             minFree = 0.0;
           }
