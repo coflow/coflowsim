@@ -61,7 +61,8 @@ You can take a quick look at the `coflowsim.CoflowSim` class to know more about 
 The code itself is fairly documented with `javadoc`, and you can run the `mvn javadoc:javadoc` to generate the documentation.
 
 ## Contribute
-Please submit an <a href="https://github.com/coflow/coflowsim/issues">issue</a> or a <a href="https://github.com/coflow/coflowsim/pulls">pull request</a> to help us keep **CoflowSim** up-to-date.
+Please submit an <a href="https://github.com/coflow/coflowsim/issues">issue</a> or a <a href="https://github.com/coflow/coflowsim/pulls">pull request</a> to help us keep **CoflowSim** up-to-date. 
+If you are using Eclipse, run your code through this project's <a href="https://github.com/coflow/coflowsim/blob/master/CoflowSim-EclipseFormatter.xml">code formatter</a> before sending the pull request.
 
 ## References
 Please refer to/cite the following papers based on the scheduler you are using: the former for **SEBF** and the latter for **DARK**.
