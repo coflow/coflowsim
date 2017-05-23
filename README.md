@@ -1,16 +1,16 @@
-#CoflowSim README
+# CoflowSim README
 
 **CoflowSim** is a flow-level simulator to compare various coflow scheduling heurisitcs against traditional per-flow scheduling techniques. 
 
 The entire project (**CoflowSim** and the actual implementation **Varys**) is still in closed beta stage. The master branch is in version 0.2.0-SNAPSHOT.
 
-##How to Compile
+## How to Compile
 **CoflowSim** does not have any dependency on external library.
 
 * You can compile from command line using Maven. Simply type `mvn package` from the root directory.
 * Import the project into Eclipse also works.
 
-##How to Run
+## How to Run
 The main method of **CoflowSim** is in the `coflowsim.CoflowSim` class, which takes and various inputs, creates appropriate scheduler, and performs the simulation.
 
 Using the `exec-maven` plugin:
@@ -25,7 +25,7 @@ From the command-line (assuming the jar to be in the `target` directory):
 java -cp target/coflowsim-*.jar coflowsim.CoflowSim <arguments>
 ```
 
-##Supported Modes and Scheduling Algorithms
+## Supported Modes and Scheduling Algorithms
 The simulator can work in two modes, i.e., to optimize to objectives.
 
 1. Minimize coflow completion time (CCT)
